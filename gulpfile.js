@@ -27,8 +27,7 @@ function requireUncached( $module ) {
 }
 
 /**
- * Compile .pug files and pass in data from json file
- * matching file name. index.pug - index.pug.json
+ * Compile .pug files
  */
 gulp.task('pug', function () {
 	return gulp.src('*.pug')

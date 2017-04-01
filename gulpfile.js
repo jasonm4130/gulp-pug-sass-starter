@@ -3,7 +3,6 @@
 
 var gulp = require('gulp'),
 	path = require('path'),
-	data = require('gulp-data'),
 	pug = require('gulp-pug'),
 	prefix = require('gulp-autoprefixer'),
 	sass = require('gulp-sass'),
@@ -19,21 +18,10 @@ var settings = {
 };
 
 /**
- * De-caching function for Data files
- */
-function requireUncached( $module ) {
-    delete require.cache[require.resolve( $module )];
-    return require( $module );
-}
-
-/**
  * Compile .pug files
  */
 gulp.task('pug', function () {
 	return gulp.src('*.pug')
-		.pipe(data(function (file) {
-			return requireUncached('./_data/' + path.basename(file.path) + '.json');
-		}))
 		.pipe(pug())
 		.pipe(gulp.dest(settings.publicDir));
 });
@@ -62,7 +50,7 @@ gulp.task('browser-sync', ['sass', 'pug'], function () {
  * need for vendor prefixes then live reload the browser.
  */
 gulp.task('sass', function () {
-	return gulp.src(settings.sassDir + '/*.sass')
+	return gulp.src(settings.sassDir + '/**/*.sass')
 		.pipe(sass({
 			includePaths: [settings.sassDir],
 			outputStyle: 'compressed'
@@ -79,7 +67,7 @@ gulp.task('sass', function () {
  */
 gulp.task('watch', function () {
 	gulp.watch(settings.sassDir + '/**', ['sass']);
-	gulp.watch(['*.pug', '**/*.pug', '**/*.json'], ['pug-rebuild']);
+	gulp.watch(['*.pug', '**/*.pug'], ['pug-rebuild']);
 });
 
 /**
